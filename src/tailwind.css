@@ -1,0 +1,5 @@
+/* Utilities only — no @tailwind base/components, since the rest of this
+   site is hand-written CSS and Tailwind's preflight reset would clobber it.
+   This file exists solely so Tailwind-authored components (copied verbatim
+   from spec) render their utility classes correctly. */
+@tailwind utilities;
