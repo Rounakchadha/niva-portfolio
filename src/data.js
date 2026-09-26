@@ -18,8 +18,8 @@ export const content = {
     ],
     tagline: 'Movement is the language I never have to translate.',
     // portrait shown beside the name in the hero
-    photoSrc: '/images/photo-1.png',
-    photoLabel: 'photo-1.png',
+    photoSrc: '/images/photo-1.jpg',
+    photoLabel: 'photo-1.jpg',
   },
 
   about: {
@@ -39,7 +39,7 @@ export const content = {
   ],
 
   gallery: [
-    { id: 1, label: 'photo-2.png', src: '/images/photo-2.png' },
+    { id: 1, label: 'photo-2.jpg', src: '/images/photo-2.jpg' },
     { id: 2, label: 'photo-4.jpg', src: '/images/photo-4.jpg' },
     { id: 3, label: 'photo-5.jpg', src: '/images/photo-5.jpg' },
   ],
@@ -73,16 +73,22 @@ export const content = {
       media: { src: '/images/photo-portrait.jpg', label: 'awpl-corporate-event.jpg', videoSrc: '/videos/awpl-corporate-event.mp4' },
     },
     {
-      title: 'Dhwani Bhanushali — "Banno Re" Music Video',
+      title: 'King – Live Concert',
       detail: 'Celebrity work / featured dancer',
-      description: 'Featured as a dancer in Dhwani Bhanushali\'s "Banno Re" music video.',
-      media: { src: '/images/photo-2.png', label: 'dhwani-banno-re.jpg', videoSrc: '/videos/dhwani-banno-re.mp4' },
+      description: "Performed as a dancer for King's (rapper) live concert.",
+      media: { src: '/images/photo-1.jpg', label: 'king-live-concert.jpg', videoSrc: '/videos/king-live-concert.mp4' },
+    },
+    {
+      title: 'Dhvani Bhanushali – Music Video',
+      detail: 'Celebrity work / featured dancer',
+      description: 'Featured as a dancer in a Dhvani Bhanushali music video, working for a commercial music production.',
+      media: { src: '/images/photo-2.jpg', label: 'dhvani-bhanushali-music-video.jpg', videoSrc: '/videos/dhwani-banno-re.mp4' },
     },
     {
       title: 'Rian Mistry Productions',
       detail: 'Near Mumbai',
       description: 'Performed at a wedding event with Rian Mistry Productions near Mumbai.',
-      media: { src: '/images/hero-bg.png', label: 'wedding-rian-mistry.jpg' },
+      media: { src: '/images/hero-bg.jpg', label: 'wedding-rian-mistry.jpg' },
     },
     {
       title: 'KnockSense – La Binge Fiesta, Lucknow',
@@ -94,13 +100,13 @@ export const content = {
       title: 'College & Dance Festivals — Mumbai',
       detail: 'Kshitij • Umang • Kiran',
       description: "Participated in some of Mumbai's well-known college festivals, performing across Battle, Bollywood and Street Dance formats.",
-      media: { src: '/images/photo-2.png', label: 'college-fests-mumbai.jpg', videoSrc: '/videos/college-fests-mumbai.mp4' },
+      media: { src: '/images/photo-2.jpg', label: 'college-fests-mumbai.jpg', videoSrc: '/videos/college-fests-mumbai.mp4' },
     },
     {
       title: 'Dance Battles — Lucknow & Mumbai',
       detail: null,
       description: 'Participated in local dance battles across Lucknow and Mumbai, gaining experience in freestyle, competitive environments and different street-dance styles.',
-      media: { src: '/images/photo-4.jpg', label: 'dance-battles.jpg' },
+      media: { src: '/images/photo-4.jpg', label: 'dance-battles.jpg', videoSrc: '/videos/dance-battles.mp4' },
     },
   ],
 

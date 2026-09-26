@@ -116,10 +116,10 @@ function ExpandedPanel({ item }: { item: HoverListItem }) {
   const hasMedia = Boolean(item.image || item.videoSrc)
 
   return (
-    <div className="pt-3 pb-6 space-y-5">
-      <div className="space-y-5 min-w-0">
+    <div className="pt-2 pb-5 md:pt-3 md:pb-6 space-y-4 md:space-y-5">
+      <div className="space-y-4 md:space-y-5 min-w-0">
         {item.description && (
-          <p className="text-base md:text-lg text-white/55 leading-relaxed">
+          <p className="text-sm md:text-lg text-white/55 leading-relaxed">
             {item.description}
           </p>
         )}
@@ -131,11 +131,11 @@ function ExpandedPanel({ item }: { item: HoverListItem }) {
           </div>
         )}
         {item.impact && item.impact.length > 0 && (
-          <div className="rounded-2xl border border-white/10 bg-black/50 p-5 md:p-6">
-            <p className="text-[11px] font-mono tracking-[0.2em] text-white/35 mb-3">
+          <div className="rounded-2xl border border-white/10 bg-black/50 p-4 md:p-6">
+            <p className="text-[10px] md:text-[11px] font-mono tracking-[0.2em] text-white/35 mb-2.5 md:mb-3">
               IMPACT &amp; RESULTS
             </p>
-            <ul className="space-y-2.5 text-sm md:text-base text-white/70">
+            <ul className="space-y-2 md:space-y-2.5 text-sm md:text-base text-white/70">
               {item.impact.map((line) => (
                 <li key={line} className="flex gap-3">
                   <span className="text-white/25 shrink-0">—</span>
@@ -148,11 +148,11 @@ function ExpandedPanel({ item }: { item: HoverListItem }) {
       </div>
 
       {item.actions && item.actions.length > 0 && (
-        <div className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap gap-2.5 md:gap-3">
           {item.actions.map((action) => {
             const className = action.primary
-              ? 'inline-flex items-center justify-center px-5 py-2 rounded-full bg-white text-black text-xs font-semibold tracking-wide hover:bg-white/90 transition-colors'
-              : 'inline-flex items-center justify-center px-5 py-2 rounded-full border border-white/25 text-white text-xs font-semibold tracking-wide hover:border-white/50 transition-colors'
+              ? 'inline-flex items-center justify-center px-4 md:px-5 py-1.5 md:py-2 rounded-full bg-white text-black text-xs font-semibold tracking-wide hover:bg-white/90 transition-colors'
+              : 'inline-flex items-center justify-center px-4 md:px-5 py-1.5 md:py-2 rounded-full border border-white/25 text-white text-xs font-semibold tracking-wide hover:border-white/50 transition-colors'
             if (action.href) {
               return (
                 <a
@@ -247,19 +247,19 @@ export default function HoverEnlargeList({
                 >
                   <div className="lg:flex lg:items-start">
                     <div className="min-w-0 lg:flex-1">
-                      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-4 gap-y-2 w-full py-4 md:py-5">
-                        <div className="flex items-start gap-3 md:gap-4 min-w-0 flex-1 basis-full sm:basis-auto">
+                      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-3 gap-y-1.5 w-full py-3 md:py-5">
+                        <div className="flex items-baseline gap-2.5 md:gap-4 min-w-0 flex-1 basis-full sm:basis-auto">
                           {showIndex && (
-                            <span className="text-xs text-white/40 font-mono w-6 shrink-0 tabular-nums pt-1">
+                            <span className="text-xs text-white/40 font-mono w-5 md:w-6 shrink-0 tabular-nums">
                               {String(index + 1).padStart(2, '0')}
                             </span>
                           )}
                           <div className="min-w-0">
-                            <h3 className="text-lg md:text-xl font-bold tracking-tight leading-tight text-white min-w-0">
+                            <h3 className="text-base md:text-xl font-bold tracking-tight leading-tight text-white min-w-0">
                               {item.title}
                             </h3>
                             {item.tags?.length ? (
-                              <div className="mt-2">
+                              <div className="mt-1.5 md:mt-2">
                                 <TagPills tags={item.tags} />
                               </div>
                             ) : (
@@ -271,6 +271,25 @@ export default function HoverEnlargeList({
                             )}
                           </div>
                         </div>
+
+                        <motion.svg
+                          className="shrink-0 text-white/35"
+                          width="16"
+                          height="16"
+                          viewBox="0 0 24 24"
+                          fill="none"
+                          animate={{ rotate: isActive ? 180 : 0 }}
+                          transition={spring}
+                          aria-hidden="true"
+                        >
+                          <path
+                            d="M6 9l6 6 6-6"
+                            stroke="currentColor"
+                            strokeWidth="2"
+                            strokeLinecap="round"
+                            strokeLinejoin="round"
+                          />
+                        </motion.svg>
                       </div>
 
                       <AnimatePresence initial={false}>

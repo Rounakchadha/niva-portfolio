@@ -117,7 +117,11 @@ export default function App() {
   }, [activeVideo]);
 
   useEffect(() => {
-    const onKey = (e) => e.key === 'Escape' && setLightboxItem(null);
+    const onKey = (e) => {
+      if (e.key !== 'Escape') return;
+      setLightboxItem(null);
+      setNavOpen(false);
+    };
     document.addEventListener('keydown', onKey);
     return () => document.removeEventListener('keydown', onKey);
   }, []);
@@ -128,7 +132,9 @@ export default function App() {
         <a href="#hero" className="nav-logo">{content.name.toUpperCase()}</a>
         <button
           id="nav-toggle"
-          aria-label="Toggle menu"
+          className={navOpen ? 'is-open' : ''}
+          aria-label={navOpen ? 'Close menu' : 'Open menu'}
+          aria-expanded={navOpen}
           onClick={() => setNavOpen((v) => !v)}
         >
           <span></span><span></span><span></span>
@@ -141,6 +147,16 @@ export default function App() {
           ))}
         </ul>
       </nav>
+
+      {/* Tapping anywhere outside the open mobile menu closes it — without
+          this, the only way to close it was tapping the hamburger itself
+          again, which gave no visual feedback that it would work. */}
+      <div
+        id="nav-backdrop"
+        className={navOpen ? 'is-open' : ''}
+        onClick={() => setNavOpen(false)}
+        aria-hidden="true"
+      />
 
       <section id="hero" className="hero">
         <div className="hero-overlay" />
@@ -161,7 +177,7 @@ export default function App() {
             </Reveal>
           </div>
           <Reveal className="hero-photo">
-            <Placeholder src={content.hero.photoSrc} label={content.hero.photoLabel} alt={`${content.name} portrait`} />
+            <Placeholder src={content.hero.photoSrc} label={content.hero.photoLabel} alt={`${content.name} portrait`} priority />
           </Reveal>
         </div>
       </section>

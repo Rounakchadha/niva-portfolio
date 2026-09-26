@@ -130,7 +130,7 @@ a { color: inherit; text-decoration: none; }
   top: 0;
   left: 0;
   right: 0;
-  z-index: 100;
+  z-index: 250;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -185,8 +185,13 @@ a { color: inherit; text-decoration: none; }
 
 #nav-toggle {
   display: none;
+  position: relative;
+  z-index: 201;
   flex-direction: column;
+  justify-content: center;
   gap: 5px;
+  width: 38px;
+  height: 38px;
   background: none;
   border: none;
   cursor: pointer;
@@ -197,6 +202,24 @@ a { color: inherit; text-decoration: none; }
   width: 22px;
   height: 2px;
   background: var(--paper);
+  transform-origin: center;
+  transition: transform 0.3s ease, opacity 0.2s ease;
+}
+
+/* Hamburger -> X, so it's visually obvious tapping it again closes the menu */
+#nav-toggle.is-open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+#nav-toggle.is-open span:nth-child(2) { opacity: 0; }
+#nav-toggle.is-open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+#nav-backdrop {
+  display: none;
+  position: fixed;
+  inset: 0;
+  z-index: 199;
+  background: rgba(0, 0, 0, 0.5);
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.35s ease;
 }
 
 /* ---------- Hero ---------- */
@@ -741,6 +764,9 @@ a { color: inherit; text-decoration: none; }
   #nav-links.is-open { transform: translateX(0); }
 
   #nav-toggle { display: flex; }
+
+  #nav-backdrop { display: block; }
+  #nav-backdrop.is-open { opacity: 1; pointer-events: auto; }
 
   .section { padding: 5.5rem 1.25rem; }
 
