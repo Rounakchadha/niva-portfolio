@@ -287,6 +287,12 @@ export default function HoverEnlargeList({
                           </div>
                         </div>
 
+                        <div className="flex items-center gap-1.5 shrink-0 lg:hidden">
+                          <span className="text-[10px] uppercase tracking-wide text-white/35">
+                            Tap to open
+                          </span>
+                        </div>
+
                         <motion.svg
                           className="shrink-0 text-white/35"
                           width="16"
