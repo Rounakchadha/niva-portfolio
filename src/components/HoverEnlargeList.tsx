@@ -239,7 +239,17 @@ export default function HoverEnlargeList({
                         role="button"
                         aria-expanded={isActive}
                         aria-label={item.title}
-                        onFocus={() => setActiveId(item.id)}
+                        onFocus={() => {
+                          // Keyboard Tab focus should still auto-expand this
+                          // on hover-capable devices (matches mouse hover).
+                          // On touch, tapping fires focus THEN click — if this
+                          // ran unconditionally it would open, and the click
+                          // handler below would immediately see it as already
+                          // open and toggle it back closed, so a single tap
+                          // silently did nothing and it took two taps to stick.
+                          if (!hasHover) return
+                          setActiveId(item.id)
+                        }}
                         onClick={() => {
                           // Hover already opens/closes this on devices that
                           // have it — only tap-toggle where there's no hover
