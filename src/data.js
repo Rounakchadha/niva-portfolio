@@ -52,7 +52,7 @@ export const content = {
       title: 'Bollywood & Zumba Instructor — Anytime Fitness',
       detail: 'Indira Nagar, Lucknow | 1 Year',
       description: 'Worked as a Bollywood & Zumba instructor at Anytime Fitness, conducting energetic group sessions weekly for all age groups. Also hold a Letter of Recommendation from Anytime Fitness.',
-      media: { src: '/images/photo-5.jpg', label: 'anytime-fitness.jpg' },
+      media: { src: '/images/anytime-fitness.jpg', label: 'anytime-fitness.jpg' },
     },
     {
       title: 'IPL – CSK Roar Fest | Chennai',

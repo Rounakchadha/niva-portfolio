@@ -732,14 +732,34 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
+  /* Both sections switch from stacked (photo full-width on top) to a
+     compact side-by-side layout: a small photo on the left, text filling
+     the rest — same arrangement as the About section already used on
+     desktop, just with the photo shrunk down so it fits next to the text
+     instead of stacking above it. */
   .hero { height: auto; }
-  .hero-grid { grid-template-columns: 1fr; height: auto; }
-  .hero-photo { height: 55vh; }
-  .hero-photo::after { box-shadow: inset 0 -80px 100px -80px rgba(20, 17, 13, 0.7); }
-  .hero-text { height: auto; overflow: visible; text-align: center; align-items: center; padding: 3.5rem 1.5rem 6rem; }
-  .hero-styles { margin-left: auto; margin-right: auto; }
-  .about-grid { grid-template-columns: 1fr; gap: 3rem; }
-  .gallery-grid { grid-template-columns: repeat(2, 1fr); }
+  .hero-grid {
+    grid-template-columns: 34% 1fr;
+    height: auto;
+    align-items: start;
+    gap: 1rem;
+  }
+  .hero-photo {
+    order: -1;
+    height: auto;
+    aspect-ratio: 3 / 4;
+  }
+  .hero-photo::after { box-shadow: none; }
+  .hero-text {
+    height: auto;
+    overflow: visible;
+    text-align: left;
+    align-items: flex-start;
+    padding: 2rem 1.25rem 3rem 0;
+  }
+  .hero-styles { margin-left: 0; margin-right: 0; max-width: 100%; }
+  .hero-styles-list { grid-template-columns: 1fr; gap: 0.5rem; }
+  .about-grid { grid-template-columns: 34% 1fr; gap: 1.25rem; align-items: start; }
 }
 
 @media (max-width: 720px) {
@@ -772,12 +792,12 @@ a { color: inherit; text-decoration: none; }
 
   .section-eyebrow { display: none; }
 
-  .gallery-grid { grid-template-columns: 1fr 1fr; }
+  .gallery-grid { gap: 0.6rem; }
 
   .contact-meta { justify-content: center; flex-direction: column; gap: 1.75rem; }
   .contact-socials a { width: 42px; height: 42px; }
 }
 
 @media (max-width: 480px) {
-  .gallery-grid { grid-template-columns: 1fr; }
+  .gallery-grid { gap: 0.4rem; }
 }
