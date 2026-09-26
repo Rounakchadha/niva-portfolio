@@ -127,7 +127,7 @@ export const content = {
 
   links: [
     { platform: 'Music Video', title: "Niva's Own Music Video", href: 'https://youtube.com/REPLACE' },
-    { platform: 'Instagram', title: '@niva.lulla', href: 'https://instagram.com/REPLACE' },
+    { platform: 'Instagram', title: '@_.nivaa9', href: 'https://instagram.com/_.nivaa9' },
     { platform: 'Vimeo', title: 'Studio Sessions', href: 'https://vimeo.com/REPLACE' },
     { platform: 'YouTube', title: 'Performance Reel', href: 'https://youtube.com/REPLACE' },
   ],
@@ -137,7 +137,7 @@ export const content = {
     email: 'nivalulla36@gmail.com',
     phone: '+91 7706900889',
     socials: [
-      { label: 'Instagram', href: 'https://instagram.com/niva.lulla' },
+      { label: 'Instagram', href: 'https://instagram.com/_.nivaa9' },
       { label: 'YouTube', href: 'https://youtube.com/REPLACE' },
       { label: 'Vimeo', href: 'https://vimeo.com/REPLACE' },
     ],

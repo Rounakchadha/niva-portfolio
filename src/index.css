@@ -732,34 +732,32 @@ a { color: inherit; text-decoration: none; }
 
 /* ---------- Responsive ---------- */
 @media (max-width: 860px) {
-  /* Both sections switch from stacked (photo full-width on top) to a
-     compact side-by-side layout: a small photo on the left, text filling
-     the rest — same arrangement as the About section already used on
-     desktop, just with the photo shrunk down so it fits next to the text
-     instead of stacking above it. */
+  /* Both sections keep the desktop's side-by-side, equal-height columns —
+     photo on one side, text on the other, photo cover-cropped to match
+     whatever height the text ends up needing (align-items: stretch, same
+     as desktop) — just with a narrower photo column so it fits next to the
+     text instead of needing the full-width photo-on-top stack. */
   .hero { height: auto; }
   .hero-grid {
-    grid-template-columns: 34% 1fr;
+    grid-template-columns: 1fr 52%;
     height: auto;
-    align-items: start;
+    align-items: stretch;
     gap: 1rem;
   }
-  .hero-photo {
-    order: -1;
-    height: auto;
-    aspect-ratio: 3 / 4;
-  }
+  .hero-photo { height: auto; }
   .hero-photo::after { box-shadow: none; }
   .hero-text {
     height: auto;
     overflow: visible;
     text-align: left;
     align-items: flex-start;
-    padding: 2rem 1.25rem 3rem 0;
+    padding: 6rem 0 3rem 1.25rem;
   }
   .hero-styles { margin-left: 0; margin-right: 0; max-width: 100%; }
   .hero-styles-list { grid-template-columns: 1fr; gap: 0.5rem; }
-  .about-grid { grid-template-columns: 34% 1fr; gap: 1.25rem; align-items: start; }
+  /* About stacks fully on mobile instead: heading (now above this grid —
+     see App.jsx), then photo, then body text underneath. */
+  .about-grid { grid-template-columns: 1fr; gap: 1.75rem; }
 }
 
 @media (max-width: 720px) {

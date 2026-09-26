@@ -225,29 +225,34 @@ export default function HoverEnlargeList({
                 className="border-b border-white/15 last:border-b-0"
               >
                 <div
-                  tabIndex={0}
-                  role="button"
-                  aria-expanded={isActive}
-                  aria-label={item.title}
                   onMouseEnter={() => setActiveId(item.id)}
                   onMouseLeave={() => setActiveId(null)}
-                  onFocus={() => setActiveId(item.id)}
                   onBlur={(e) => clearActiveUnlessInside(e.currentTarget, e.relatedTarget)}
-                  onClick={() => {
-                    // Hover already opens/closes this on devices that have
-                    // it — only tap-toggle where there's no hover to drive it.
-                    if (hasHover) return
-                    setActiveId((current) => (current === item.id ? null : item.id))
-                  }}
-                  className={`w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-inset transition-colors px-4 md:px-5 ${
-                    !hasHover ? 'cursor-pointer' : ''
-                  } ${
+                  className={`w-full text-left transition-colors px-4 md:px-5 ${
                     isActive ? 'bg-white/[0.05]' : 'bg-transparent'
                   }`}
                 >
                   <div className="lg:flex lg:items-start">
                     <div className="min-w-0 lg:flex-1">
-                      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-3 gap-y-1.5 w-full py-3 md:py-5">
+                      <div
+                        tabIndex={0}
+                        role="button"
+                        aria-expanded={isActive}
+                        aria-label={item.title}
+                        onFocus={() => setActiveId(item.id)}
+                        onClick={() => {
+                          // Hover already opens/closes this on devices that
+                          // have it — only tap-toggle where there's no hover
+                          // to drive it. Scoped to just this header row (not
+                          // the whole card) so tapping the description, photo,
+                          // etc. inside the expanded panel doesn't also close it.
+                          if (hasHover) return
+                          setActiveId((current) => (current === item.id ? null : item.id))
+                        }}
+                        className={`flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-3 gap-y-1.5 w-full py-3 md:py-5 outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-inset ${
+                          !hasHover ? 'cursor-pointer' : ''
+                        }`}
+                      >
                         <div className="flex items-baseline gap-2.5 md:gap-4 min-w-0 flex-1 basis-full sm:basis-auto">
                           {showIndex && (
                             <span className="text-xs text-white/40 font-mono w-5 md:w-6 shrink-0 tabular-nums">

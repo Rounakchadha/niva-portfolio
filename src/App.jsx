@@ -183,12 +183,12 @@ export default function App() {
       </section>
 
       <section id="about" className="section about">
+        <SectionHead n="01" title="About" />
         <div className="about-grid">
           <Reveal className="about-photo">
             <Placeholder src={content.about.portraitSrc} label={content.about.portraitLabel} alt={`${content.name} portrait`} />
           </Reveal>
           <div className="about-text">
-            <SectionHead n="01" title="About" />
             {content.about.bio.map((para, i) => <p key={i}>{para}</p>)}
           </div>
         </div>
