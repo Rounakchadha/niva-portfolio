@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 
 export type HoverListAction = {
@@ -60,7 +60,7 @@ function useHasHover() {
 
 function TagPills({ tags }: { tags: string[] }) {
   return (
-    <div className="hidden sm:flex flex-wrap gap-2 justify-end shrink-0 max-w-[min(100%,20rem)]">
+    <div className="flex flex-wrap gap-2 justify-start">
       {tags.map((tag) => (
         <span
           key={tag}
@@ -74,18 +74,32 @@ function TagPills({ tags }: { tags: string[] }) {
 }
 
 function MediaPreview({ item }: { item: HoverListItem }) {
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    // Safety net: if autoplay gets interrupted (e.g. this card remounting
+    // via AnimatePresence) the browser leaves it paused, showing its native
+    // play button overlay instead of just looping silently.
+    videoRef.current?.play().catch(() => {})
+  }, [item.videoSrc])
+
   if (!item.image && !item.videoSrc) return null
 
   return (
-    <div className="relative w-full max-w-[280px] mx-auto lg:mx-0 lg:w-[280px] lg:shrink-0 aspect-[4/3] overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
+    <div className="relative w-full aspect-square overflow-hidden rounded-2xl border border-white/10 bg-white/[0.03]">
       {item.videoSrc ? (
         <video
+          ref={videoRef}
           src={item.videoSrc}
-          className="absolute inset-0 h-full w-full object-cover object-center"
+          className="media-preview-video absolute inset-0 h-full w-full object-cover object-center"
           muted
           loop
           playsInline
           autoPlay
+          disablePictureInPicture
+          disableRemotePlayback
+          controls={false}
+          onPause={() => videoRef.current?.play().catch(() => {})}
         />
       ) : (
         <img
@@ -103,39 +117,32 @@ function ExpandedPanel({ item }: { item: HoverListItem }) {
 
   return (
     <div className="pt-3 pb-6 space-y-5">
-      <div
-        className={
-          hasMedia
-            ? 'grid grid-cols-1 lg:grid-cols-[minmax(0,1fr)_280px] gap-6 lg:gap-8 lg:items-start'
-            : 'min-w-0'
-        }
-      >
-        <div className="space-y-5 min-w-0">
-          {item.description && (
-            <p className="text-base md:text-lg text-white/55 leading-relaxed">
-              {item.description}
-            </p>
-          )}
-          {item.impact && item.impact.length > 0 && (
-            <div className="rounded-2xl border border-white/10 bg-black/50 p-5 md:p-6">
-              <p className="text-[11px] font-mono tracking-[0.2em] text-white/35 mb-3">
-                IMPACT &amp; RESULTS
-              </p>
-              <ul className="space-y-2.5 text-sm md:text-base text-white/70">
-                {item.impact.map((line) => (
-                  <li key={line} className="flex gap-3">
-                    <span className="text-white/25 shrink-0">—</span>
-                    <span className="min-w-0">{line}</span>
-                  </li>
-                ))}
-              </ul>
-            </div>
-          )}
-        </div>
-
+      <div className="space-y-5 min-w-0">
+        {item.description && (
+          <p className="text-base md:text-lg text-white/55 leading-relaxed">
+            {item.description}
+          </p>
+        )}
+        {/* On mobile there's no side column for the media (see the lg:grid
+            wrapper around the row below), so it renders inline here instead. */}
         {hasMedia && (
-          <div className="lg:pt-0.5 lg:self-start">
+          <div className="lg:hidden">
             <MediaPreview item={item} />
+          </div>
+        )}
+        {item.impact && item.impact.length > 0 && (
+          <div className="rounded-2xl border border-white/10 bg-black/50 p-5 md:p-6">
+            <p className="text-[11px] font-mono tracking-[0.2em] text-white/35 mb-3">
+              IMPACT &amp; RESULTS
+            </p>
+            <ul className="space-y-2.5 text-sm md:text-base text-white/70">
+              {item.impact.map((line) => (
+                <li key={line} className="flex gap-3">
+                  <span className="text-white/25 shrink-0">—</span>
+                  <span className="min-w-0">{line}</span>
+                </li>
+              ))}
+            </ul>
           </div>
         )}
       </div>
@@ -201,7 +208,11 @@ export default function HoverEnlargeList({
     <div className="relative w-full">
       <div className="flex flex-col rounded-xl md:rounded-2xl border border-white/15 overflow-visible">
         {items.map((item, index) => {
-          const isActive = hasHover && activeId === item.id
+          // On touch devices hover never fires, so expansion has to be
+          // driven by tap instead — `isActive` tracks activeId regardless
+          // of hover capability, but the "dim the other rows" effect stays
+          // hover-only, per the original spec for touch devices.
+          const isActive = activeId === item.id
           const isDimmed = hasHover && activeId !== null && activeId !== item.id
           const expandable = itemIsExpandable(item)
 
@@ -215,52 +226,94 @@ export default function HoverEnlargeList({
               >
                 <div
                   tabIndex={0}
-                  role="group"
+                  role="button"
+                  aria-expanded={isActive}
                   aria-label={item.title}
                   onMouseEnter={() => setActiveId(item.id)}
                   onMouseLeave={() => setActiveId(null)}
                   onFocus={() => setActiveId(item.id)}
                   onBlur={(e) => clearActiveUnlessInside(e.currentTarget, e.relatedTarget)}
+                  onClick={() => {
+                    // Hover already opens/closes this on devices that have
+                    // it — only tap-toggle where there's no hover to drive it.
+                    if (hasHover) return
+                    setActiveId((current) => (current === item.id ? null : item.id))
+                  }}
                   className={`w-full text-left outline-none focus-visible:ring-2 focus-visible:ring-white/40 focus-visible:ring-inset transition-colors px-4 md:px-5 ${
+                    !hasHover ? 'cursor-pointer' : ''
+                  } ${
                     isActive ? 'bg-white/[0.05]' : 'bg-transparent'
                   }`}
                 >
-                  <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-4 gap-y-2 w-full cursor-default py-4 md:py-5">
-                    <div className="flex items-center gap-3 md:gap-4 min-w-0 flex-1 basis-full sm:basis-auto">
-                      {showIndex && (
-                        <span className="text-xs text-white/40 font-mono w-6 shrink-0 tabular-nums">
-                          {String(index + 1).padStart(2, '0')}
-                        </span>
-                      )}
-                      <h3 className="text-lg md:text-xl font-bold tracking-tight leading-tight text-white min-w-0">
-                        {item.title}
-                      </h3>
-                    </div>
-                    {item.tags?.length ? (
-                      <TagPills tags={item.tags} />
-                    ) : (
-                      item.subtitle && (
-                        <span className="hidden md:block text-xs text-white/50 shrink-0">
-                          {item.subtitle}
-                        </span>
-                      )
-                    )}
-                  </div>
+                  <div className="lg:flex lg:items-start">
+                    <div className="min-w-0 lg:flex-1">
+                      <div className="flex flex-wrap sm:flex-nowrap items-center justify-between gap-x-4 gap-y-2 w-full py-4 md:py-5">
+                        <div className="flex items-start gap-3 md:gap-4 min-w-0 flex-1 basis-full sm:basis-auto">
+                          {showIndex && (
+                            <span className="text-xs text-white/40 font-mono w-6 shrink-0 tabular-nums pt-1">
+                              {String(index + 1).padStart(2, '0')}
+                            </span>
+                          )}
+                          <div className="min-w-0">
+                            <h3 className="text-lg md:text-xl font-bold tracking-tight leading-tight text-white min-w-0">
+                              {item.title}
+                            </h3>
+                            {item.tags?.length ? (
+                              <div className="mt-2">
+                                <TagPills tags={item.tags} />
+                              </div>
+                            ) : (
+                              item.subtitle && (
+                                <span className="mt-1 block text-xs text-white/50">
+                                  {item.subtitle}
+                                </span>
+                              )
+                            )}
+                          </div>
+                        </div>
+                      </div>
 
-                  <AnimatePresence initial={false}>
-                    {isActive && (
+                      <AnimatePresence initial={false}>
+                        {isActive && (
+                          <motion.div
+                            key="panel"
+                            initial={{ height: 0 }}
+                            animate={{ height: 'auto' }}
+                            exit={{ height: 0 }}
+                            transition={panelSpring}
+                            className="overflow-hidden min-h-0"
+                          >
+                            <ExpandedPanel item={item} />
+                          </motion.div>
+                        )}
+                      </AnimatePresence>
+                    </div>
+
+                    {/* Desktop-only media column — a sibling of the header
+                        and the collapsing text panel (not nested inside
+                        either), so it can align with the TOP of the whole
+                        row without getting clipped by the panel's own
+                        height-collapse overflow. Width (not a class toggle)
+                        is what animates, so it eases open/closed instead of
+                        snapping — a hard class switch here is what caused
+                        the "image suddenly gets bigger" glitch. */}
+                    {(item.image || item.videoSrc) && (
                       <motion.div
-                        key="panel"
-                        initial={{ height: 0 }}
-                        animate={{ height: 'auto' }}
-                        exit={{ height: 0 }}
+                        className="hidden lg:block overflow-hidden"
+                        initial={false}
+                        animate={{
+                          width: isActive ? 360 : 0,
+                          opacity: isActive ? 1 : 0,
+                          marginLeft: isActive ? 32 : 0,
+                        }}
                         transition={panelSpring}
-                        className="overflow-hidden min-h-0"
                       >
-                        <ExpandedPanel item={item} />
+                        <div className="w-full pt-4">
+                          <MediaPreview item={item} />
+                        </div>
                       </motion.div>
                     )}
-                  </AnimatePresence>
+                  </div>
                 </div>
               </motion.div>
             )

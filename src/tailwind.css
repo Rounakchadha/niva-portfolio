@@ -3,3 +3,14 @@
    This file exists solely so Tailwind-authored components (copied verbatim
    from spec) render their utility classes correctly. */
 @tailwind utilities;
+
+/* Safari shows a native play/pause overlay on <video> elements even without
+   a `controls` attribute — this is a silent, looping preview clip, so hide it. */
+.media-preview-video::-webkit-media-controls,
+.media-preview-video::-webkit-media-controls-start-playback-button,
+.media-preview-video::-webkit-media-controls-play-button {
+  display: none !important;
+  -webkit-appearance: none;
+  opacity: 0 !important;
+  pointer-events: none !important;
+}

@@ -48,27 +48,60 @@ export const content = {
     // `media.src` is a placeholder photo (recycled from the gallery/hero
     // shots below) until real event photos replace them — swap each `src`
     // for the matching real photo when it's ready, same as the gallery above.
-    { year: '—', title: "King's Concert", detail: 'Celebrity performance', story: null, media: { src: '/images/photo-1.png', label: 'kings-concert.jpg' } },
-    // Optional `media.videoSrc` — placeholder clip until a real performance reel is added.
     {
-      year: '—',
-      title: 'Dhwani Bhanushali — Music Video',
-      detail: 'Celebrity work / featured dancer',
-      story: null,
-      media: {
-        src: '/images/photo-2.png',
-        label: 'dhwani-music-video.jpg',
-        videoSrc: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4',
-      },
+      title: 'Bollywood & Zumba Instructor — Anytime Fitness',
+      detail: 'Indira Nagar, Lucknow | 1 Year',
+      description: 'Worked as a Bollywood & Zumba instructor at Anytime Fitness, conducting energetic group sessions weekly for all age groups. Also hold a Letter of Recommendation from Anytime Fitness.',
+      media: { src: '/images/photo-5.jpg', label: 'anytime-fitness.jpg' },
     },
-    { year: '—', title: 'IPL — CSK Roar Fest', detail: 'Group performance with Kings United', story: null, media: { src: '/images/photo-4.jpg', label: 'csk-roar-fest.jpg' } },
-    { year: '—', title: 'Free Fire Event — Bodh Gaya Awards', detail: 'Performance with Kings United', story: null, media: { src: '/images/photo-5.jpg', label: 'bodh-gaya-awards.jpg' } },
-    { year: '—', title: 'Corporate Event', detail: 'With Kings United', story: null, media: { src: '/images/photo-portrait.jpg', label: 'corporate-event.jpg' } },
-    { year: '—', title: 'Wedding Event', detail: 'Rian Mistry Production', story: null, media: { src: '/images/hero-bg.png', label: 'wedding-event.jpg' } },
-    { year: '—', title: 'Kshitij — Mithibai Fest', detail: 'Semi-finalist', story: null, media: { src: '/images/photo-1.png', label: 'kshitij-mithibai.jpg' } },
-    { year: '—', title: 'Umang & Kiran', detail: 'College fest performances', story: null, media: { src: '/images/photo-2.png', label: 'umang-kiran.jpg' } },
-    { year: '—', title: 'Waacking Workshop', detail: 'Bangalore', story: null, media: { src: '/images/photo-4.jpg', label: 'waacking-workshop.jpg' } },
-    { year: '1 yr', title: 'Bollywood / Zumba Instructor', detail: 'Anytime Fitness', story: null, media: { src: '/images/photo-5.jpg', label: 'anytime-fitness.jpg' } },
+    {
+      title: 'IPL – CSK Roar Fest | Chennai',
+      detail: 'Performance with Kings United',
+      description: 'Performed as part of the Kings United team at the CSK Roar Fest in Chennai, a large-scale IPL celebration and live entertainment event.',
+      media: { src: '/images/photo-4.jpg', label: 'csk-roar-fest.jpg', videoSrc: '/videos/csk-roar-fest.mp4' },
+    },
+    {
+      title: 'The Booyah Awards 2026 | Free Fire MAX',
+      detail: 'Greater Noida',
+      description: "Performed at The Booyah Awards 2026, Free Fire MAX's India-focused awards celebration. The event was held at the India Expo Centre & Mart, Greater Noida, bringing together creators, esports players and entertainment performances.",
+      media: { src: '/images/booyah-awards-2026.jpg', label: 'booyah-awards-2026.jpg' },
+    },
+    {
+      title: 'AWPL Corporate Event 2026',
+      detail: 'Performance with Kings United',
+      description: 'Performed with Kings United at an AWPL corporate event, delivering a high-energy stage performance for a corporate audience.',
+      media: { src: '/images/photo-portrait.jpg', label: 'awpl-corporate-event.jpg', videoSrc: '/videos/awpl-corporate-event.mp4' },
+    },
+    {
+      title: 'Dhwani Bhanushali — "Banno Re" Music Video',
+      detail: 'Celebrity work / featured dancer',
+      description: 'Featured as a dancer in Dhwani Bhanushali\'s "Banno Re" music video.',
+      media: { src: '/images/photo-2.png', label: 'dhwani-banno-re.jpg', videoSrc: '/videos/dhwani-banno-re.mp4' },
+    },
+    {
+      title: 'Rian Mistry Productions',
+      detail: 'Near Mumbai',
+      description: 'Performed at a wedding event with Rian Mistry Productions near Mumbai.',
+      media: { src: '/images/hero-bg.png', label: 'wedding-rian-mistry.jpg' },
+    },
+    {
+      title: 'KnockSense – La Binge Fiesta, Lucknow',
+      detail: 'DLF MyPad, Vibhuti Khand',
+      description: "Performed as a dancer at KnockSense's La Binge Fiesta in Lucknow, taking part in the live event at DLF MyPad, Vibhuti Khand.",
+      media: { src: '/images/knocksense-la-binge-fiesta.jpg', label: 'knocksense-la-binge-fiesta.jpg' },
+    },
+    {
+      title: 'College & Dance Festivals — Mumbai',
+      detail: 'Kshitij • Umang • Kiran',
+      description: "Participated in some of Mumbai's well-known college festivals, performing across Battle, Bollywood and Street Dance formats.",
+      media: { src: '/images/photo-2.png', label: 'college-fests-mumbai.jpg', videoSrc: '/videos/college-fests-mumbai.mp4' },
+    },
+    {
+      title: 'Dance Battles — Lucknow & Mumbai',
+      detail: null,
+      description: 'Participated in local dance battles across Lucknow and Mumbai, gaining experience in freestyle, competitive environments and different street-dance styles.',
+      media: { src: '/images/photo-4.jpg', label: 'dance-battles.jpg' },
+    },
   ],
 
   training: [
@@ -76,16 +109,14 @@ export const content = {
     { title: 'Jai Hind College', detail: 'Mumbai — BMM' },
   ],
 
-  // Silent, looping clips for the auto-scrolling reel in "More Videos &
-  // Links" — all placeholders pointing at the same sample clip until real
-  // performance cutdowns replace each `videoSrc`.
+  // Real reels, rendered via Instagram's own embed widget.
   moreVideos: [
-    { id: 1, title: 'Performance clip 01', videoSrc: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
-    { id: 2, title: 'Performance clip 02', videoSrc: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
-    { id: 3, title: 'Performance clip 03', videoSrc: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
-    { id: 4, title: 'Performance clip 04', videoSrc: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
-    { id: 5, title: 'Performance clip 05', videoSrc: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
-    { id: 6, title: 'Performance clip 06', videoSrc: 'https://interactive-examples.mdn.mozilla.net/media/cc0-videos/flower.mp4' },
+    { id: 1, href: 'https://www.instagram.com/reel/DX649NhPv31/' },
+    { id: 2, href: 'https://www.instagram.com/reel/DbQnbAeorT3/' },
+    { id: 3, href: 'https://www.instagram.com/reel/DcbGKIQoOoX/' },
+    { id: 4, href: 'https://www.instagram.com/reel/Dak5U19I0B5/' },
+    { id: 5, href: 'https://www.instagram.com/reel/Dc8i50YTXMV/' },
+    { id: 6, href: 'https://www.instagram.com/reel/DdHSsq9N0XR/' },
   ],
 
   links: [
@@ -100,7 +131,7 @@ export const content = {
     email: 'nivalulla36@gmail.com',
     phone: '+91 7706900889',
     socials: [
-      { label: 'Instagram', href: 'https://instagram.com/REPLACE' },
+      { label: 'Instagram', href: 'https://instagram.com/niva.lulla' },
       { label: 'YouTube', href: 'https://youtube.com/REPLACE' },
       { label: 'Vimeo', href: 'https://vimeo.com/REPLACE' },
     ],

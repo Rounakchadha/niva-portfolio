@@ -3,7 +3,8 @@ import { content } from './data.js';
 import Reveal from './components/Reveal.jsx';
 import Placeholder from './components/Placeholder.jsx';
 import HoverEnlargeList from './components/HoverEnlargeList.tsx';
-import VideoReel from './components/VideoReel.jsx';
+import InstagramReel from './components/InstagramReel.jsx';
+import SocialIcon from './components/SocialIcon.jsx';
 
 const NAV_ITEMS = [
   ['about', 'About'],
@@ -11,17 +12,19 @@ const NAV_ITEMS = [
   ['gallery', 'Gallery'],
   ['experience', 'Experience'],
   ['links', 'Links'],
-  ['training', 'Training'],
   ['contact', 'Contact'],
 ];
 
-function SectionHead({ n, title, hl, center }) {
+function SectionHead({ n, title, hl, center, tagline }) {
   return (
     <Reveal className={`section-head${center ? ' center' : ''}`}>
-      <span className="section-eyebrow">{n}</span>
-      <h2 className="section-title">
-        {title} {hl && <span className="hl">{hl}</span>}
-      </h2>
+      <div className="section-head-row">
+        <span className="section-eyebrow">{n}</span>
+        <h2 className="section-title">
+          {title} {hl && <span className="hl">{hl}</span>}
+        </h2>
+      </div>
+      {tagline && <p className="section-tagline">{tagline}</p>}
     </Reveal>
   );
 }
@@ -35,6 +38,11 @@ export default function App() {
   const playerElRef = useRef(null);
   const didMountVideoRef = useRef(false);
   const playerCreatedRef = useRef(false);
+  // cueVideoById is only guaranteed to work after the player's onReady event —
+  // calling it earlier (e.g. clicking a dot right after the page loads)
+  // silently no-ops, which looked like "switching does nothing".
+  const playerReadyRef = useRef(false);
+  const pendingVideoIndexRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
@@ -54,7 +62,22 @@ export default function App() {
         videoId: content.videos[0].youtubeId,
         width: '100%',
         height: '100%',
-        playerVars: { rel: 0 },
+        playerVars: { rel: 0, autoplay: 0 },
+        events: {
+          onReady: () => {
+            playerReadyRef.current = true;
+            // A dot may have been clicked before the player finished
+            // initializing — apply that switch now instead of dropping it.
+            if (pendingVideoIndexRef.current !== null) {
+              const video = content.videos[pendingVideoIndexRef.current];
+              pendingVideoIndexRef.current = null;
+              playerRef.current.cueVideoById({
+                videoId: video.youtubeId,
+                startSeconds: video.startSeconds || 0,
+              });
+            }
+          },
+        },
       });
     };
 
@@ -80,8 +103,17 @@ export default function App() {
       didMountVideoRef.current = true;
       return;
     }
+    // cueVideoById (not loadVideoById) — loads the video without starting
+    // playback, so picking a dot doesn't auto-play it. If the player hasn't
+    // fired onReady yet, queue this switch instead of dropping it — the
+    // onReady handler above will apply it once the player can actually
+    // accept commands.
+    if (!playerReadyRef.current) {
+      pendingVideoIndexRef.current = activeVideo;
+      return;
+    }
     const video = content.videos[activeVideo];
-    playerRef.current?.loadVideoById?.({ videoId: video.youtubeId, startSeconds: video.startSeconds || 0 });
+    playerRef.current?.cueVideoById?.({ videoId: video.youtubeId, startSeconds: video.startSeconds || 0 });
   }, [activeVideo]);
 
   useEffect(() => {
@@ -191,20 +223,21 @@ export default function App() {
       </div>
 
       <section id="experience" className="section experience">
-        <SectionHead n="04" title="Experience" />
+        <SectionHead
+          n="04"
+          title="Experience"
+          tagline="Live Performances • Events • Commercial Work • Dance Training"
+        />
         <HoverEnlargeList
           showPreviewImage={false}
           items={content.experience.map((item, i) => ({
             id: String(i),
             title: item.title,
-            tags: item.tags ?? [item.detail],
+            tags: item.tags ?? (item.detail ? [item.detail] : []),
             description:
               item.description
               ?? `Short placeholder for “${item.title}” — role, setting, and one line on the vibe.`,
-            impact: item.impact ?? [
-              'Placeholder outcome one.',
-              'Placeholder outcome two.',
-            ],
+            impact: item.impact,
             actions: item.actions ?? [
               { label: 'VIEW CLIP', primary: true, href: '#videos' },
               { label: 'GALLERY', href: '#gallery' },
@@ -217,47 +250,34 @@ export default function App() {
       </section>
 
       <section id="links" className="section links">
-        <SectionHead n="05" title="More" hl="Videos & Links" center />
-        <VideoReel videos={content.moreVideos} />
-        <div className="links-grid">
-          {content.links.map((link, i) => (
-            <Reveal
-              as="a"
-              key={i}
-              href={link.href}
-              target="_blank"
-              rel="noopener"
-              className="link-card"
-            >
-              <span className="link-platform">{link.platform}</span>
-              <span className="link-title">{link.title}</span>
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      <section id="training" className="section training">
-        <SectionHead n="06" title="Training" hl="& Education" />
-        <div className="training-grid">
-          {content.training.map((item, i) => (
-            <Reveal as="div" key={i} className="training-item">
-              <h3>{item.title}</h3>
-              <p>{item.detail}</p>
-            </Reveal>
-          ))}
-        </div>
+        <SectionHead n="05" title="More" hl="Videos" center />
+        <InstagramReel videos={content.moreVideos} />
       </section>
 
       <section id="contact" className="section contact">
-        <SectionHead n="07" title="Contact" center />
+        <SectionHead n="06" title="Contact" center />
         <Reveal className="contact-content">
           <p className="contact-note">{content.contact.note}</p>
           <a className="contact-email" href={`mailto:${content.contact.email}`}>{content.contact.email}</a>
-          <p className="contact-phone">{content.contact.phone}</p>
-          <div className="contact-socials">
-            {content.contact.socials.map((s) => (
-              <a key={s.label} href={s.href} target="_blank" rel="noopener">{s.label}</a>
-            ))}
+          <div className="contact-meta">
+            <a className="contact-phone" href={`tel:${content.contact.phone.replace(/\s/g, '')}`}>
+              <SocialIcon name="phone" size={14} />
+              {content.contact.phone}
+            </a>
+            <div className="contact-socials">
+              {content.contact.socials.map((s) => (
+                <a
+                  key={s.label}
+                  href={s.href}
+                  target="_blank"
+                  rel="noopener"
+                  aria-label={s.label}
+                  title={s.label}
+                >
+                  <SocialIcon name={s.label} size={18} />
+                </a>
+              ))}
+            </div>
           </div>
         </Reveal>
         <footer className="site-footer">
